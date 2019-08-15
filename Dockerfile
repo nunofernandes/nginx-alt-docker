@@ -1,15 +1,18 @@
+
 FROM nginx:mainline-alpine
 
 ## Make the project README available for `usage`
 COPY README.md /
 
-## We use a Perl-based entrypoint to tweak the configuration based on ENV vars
-## See README for all ENV vars supported
-RUN apk --no-cache add perl 
-COPY env_config.pl /usr/local/bin/
+RUN apk --no-cache add bash 
 
-COPY nginx.conf.tmpl /etc/nginx/nginx.conf.tmpl
+ENV CONFD_VERSION=0.16.0
+ADD https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64 /usr/bin/confd
+COPY entrypoint.sh /usr/local/bin/
+
+COPY nginx.conf.tmpl /etc/confd/templates/nginx.tmpl
+COPY nginx.toml /etc/confd/conf.d/nginx.toml
 
 ## Rewrite our template file with our ENV-based parameters
 ## See README.md to know which vars are required
-ENTRYPOINT ["/usr/local/bin/env_config.pl"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

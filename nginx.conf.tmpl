@@ -28,17 +28,19 @@ http {
     keepalive_timeout 30;
 
     ## Our default server now...
+    {{range split (getv "/port" "80") "," }}
     server {
-        listen       ${PORT:-80} default_server;
+        listen       {{.}} default_server;
         server_name  _; ## any host will do...
 
         location / {
-            root   ${DOCROOT:-/usr/share/nginx/html};
-            index  ${INDEX_FILE:-index.html};
+            root   {{ getv "/docroot" "/usr/share/nginx/html"}};
+            index  {{ getv "/index/file" "index.html"}};
         }
 
-        location ${HEALTH_URL:-/_/health} {
-            return ${HEALTH_HTTP_STATUS:-200} ${HEALTH_CONTENT:-"ok"};
+        location {{ getv "/health/url" "/_/health"}} {
+            return {{getv "/health/http/status" "200" }} {{ getv "/health/content" "ok"}};
         }
     }
+    {{end}}
 }
