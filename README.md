@@ -16,7 +16,7 @@ benefit from ENV-based customisation.
 
 To use this image:
 
-1. create a Dockerfile on your project and use `FROM melopt/nginx-alt`;
+1. create a Dockerfile on your project and use `FROM nunofernandes/nginx-base`;
 2. copy your project `nginx.conf` into `/etc/nginx/nginx.conf.tmpl`: the
    default `ENTRYPOINT` script will do the variable substitution on that
    file and place it in `/etc/nginx/nginx.conf`;
@@ -85,7 +85,7 @@ copy it over to `/etc/nginx/nginx.conf.tmpl`. For example, you could use
 this Dockerfile:
 
 ```
-FROM melopt/nginx-alt
+FROM nunofernandes/nginx-base
 
 COPY nginx.conf.tmpl /etc/nginx/nginx.conf.tmpl
 ```
@@ -94,4 +94,4 @@ Alternatively, if you don't want to create your own Dockerfile just
 to update the configuration template, you can also use a `docker
 run` mount:
 
-    docker run -v my.nginx.conf.tmpl:/etc/nginx/nginx.conf.tmpl melopt/nginx-alt
+    docker run -v my.nginx.conf.tmpl:/etc/nginx/nginx.conf.tmpl nunofernandes/nginx-base
