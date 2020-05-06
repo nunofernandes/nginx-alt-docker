@@ -4,7 +4,7 @@ FROM nginx:mainline-alpine
 ## Make the project README available for `usage`
 COPY README.md /
 
-RUN apk --no-cache add bash 
+RUN apk --no-cache update && apk --no-cache add bash
 
 ENV CONFD_VERSION=0.16.0
 ADD https://github.com/kelseyhightower/confd/releases/download/v${CONFD_VERSION}/confd-${CONFD_VERSION}-linux-amd64 /usr/bin/confd
